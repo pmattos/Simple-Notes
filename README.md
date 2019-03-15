@@ -14,11 +14,11 @@ Rich formatting summary:
 UI layer:
 
 * `NotesListViewController`. Displays all created noted in a table view.
-* `NoteEditorViewController`. View controller to shows and edits a given note.
+* `NoteEditorViewController`. View controller to show *and* edit a given note.
 * `NoteTextStorage`. Stores a given note text with rich formatting. This implements the core text formatting engine.
 
 Model layer:
 
-* `Note`. The note model layer object. For simplicity, this is designed as a plain value type.
+* `Note`. The note model layer object. For simplicity, this is designed as a plain value type. The actual note contents is stored in *plain text*, following a simple Markdown-ish format.
 * `NotesManager`. Manages a list of notes model objects. This class centralizes with all communication with Firebase.
 
