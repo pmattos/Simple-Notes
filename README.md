@@ -24,11 +24,11 @@ Model layer:
 
 ## Markdown-ish Encoding ##
 
-The following richly formatted note below:
+The following richly formatted note:
 
-<img src="Screenshots/note-editor.png" width="320">
+<img src="Screenshots/note-editor.png" width="315">
 
-is encoded as the following Markdown-based plain text file (for database storage):
+is encoded as a Markdown-based plain text *string* (for database storage):
 
 ```
 Links & Lists
