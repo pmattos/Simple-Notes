@@ -131,61 +131,6 @@ NoteTextViewDelegate, StoryboardInstantiatable {
 
     // MARK: - Editing Flow
 
-    // FIXME: Delete old code after commit only!
-    
-    /*
-    private func setUpEditingFlow() {
-        precondition(isViewLoaded)
-        precondition(noteTextView != nil)
-        
-        let editTap = UITapGestureRecognizer(target: self, action: #selector(noteViewTapped))
-        editTap.numberOfTapsRequired = 1
-        editTap.cancelsTouchesInView = true
-        noteView.addGestureRecognizer(editTap)
-    }
-    */
-    
-    /*
-    @objc private func noteViewTapped(_ editTap: UITapGestureRecognizer) {
-        // Location of tap in noteView coordinates and taking the inset into account.
-        var location = editTap.location(in: noteTextView)
-        location.x -= noteTextView.textContainerInset.left;
-        location.y -= noteTextView.textContainerInset.top;
-        
-        // Character index at tap location.
-        var unitInsertionPoint: CGFloat = 0
-        let charIndex = noteTextView.layoutManager.characterIndex(
-            for: location,
-            in: noteTextView.textContainer,
-            fractionOfDistanceBetweenInsertionPoints: &unitInsertionPoint
-        )
-        assert(unitInsertionPoint >= 0.0 && unitInsertionPoint <= 1.0)
-
-        if !detectLinks(at: charIndex, with: unitInsertionPoint) {
-            startEditing(at: charIndex, with: unitInsertionPoint)
-        }
-    }
- 
-    private func detectLinks(at charIndex: Int, with unitInsertionPoint: CGFloat) -> Bool {
-        guard charIndex < noteTextView.textStorage.length else {
-            return false
-        }
-        
-        let noteText = noteTextView.attributedText!
-        var linkRange = NSRange(location: 0, length: 0)
-        let linkValue = noteText.attribute(.link, at: charIndex, effectiveRange: &linkRange)
-        guard let linkURL = linkValue as? URL else {
-            return false
-        }
-        guard !(charIndex == linkRange.upperBound - 1 && unitInsertionPoint == 1.0) else {
-            return false // Tapped after the link end.
-        }
-        openURL(linkURL, range: linkRange)
-
-        return true
-    }
-    */
-    
     private func saveNoteIfNeeded() {
         note.contents = noteTextStorage.deformatted()
         switch NotesManager.shared.saveNote(note) {
@@ -277,16 +222,6 @@ NoteTextViewDelegate, StoryboardInstantiatable {
             noteTextView.contentInset = oldContentInsets
             noteTextView.scrollIndicatorInsets = oldScrollIndicatorInsets
         }
-
-        /*
-        var info = notification.userInfo!
-        let keyboardSize = (info[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
-        let contentInsets : UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: -keyboardSize!.height, right: 0.0)
-        noteTextView.contentInset = contentInsets
-        noteTextView.scrollIndicatorInsets = contentInsets
-        self.view.endEditing(true)
-        noteTextView.isScrollEnabled = false
-        */
     }
 }
 
@@ -500,13 +435,6 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
             }
         }
         self.oldSelectedRange = selectedRange
-        
-        /*
-        layoutIfNeeded()
-        var caretRect = self.caretRect(for: self.selectedTextRange!.end)
-        caretRect.size.height += textContainerInset.bottom;
-        scrollRectToVisible(caretRect, animated: true)
-        */
     }
 
     // MARK: - Checkmarks Views Overlay
@@ -607,32 +535,4 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
         }
         print("Character: \(charName)")
     }
-
-    /*
-    /// Fixes changing caret height bug.
-    /// More info: https://stackoverflow.com/a/20311650/819340
-    override func caretRect(for position: UITextPosition) -> CGRect {
-        var caretRect = super.caretRect(for: position)
-        //let font = noteTextStorage.bodyFont
-        
-        // "descender" is expressed as a negative value,
-        // so to add its height you must subtract its value
-        //caretRect.size.height = font.pointSize - font.descender
-        return caretRect
-    }
-    */
-    
-    /*
-    private func openURL(_ linkURL: URL, range linkRange: NSRange) {
-        let highlightStyle: [NSAttributedString.Key: Any] = [
-            .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
-        ]
-        noteTextStorage.addAttributes(highlightStyle, range: linkRange)
-     
-        run(afterTimeInterval: 0.20) {
-            self.noteTextStorage.removeAttribute(.underlineStyle, range: linkRange)
-            UIApplication.shared.open(linkURL)
-        }
-    }
-    */
 }

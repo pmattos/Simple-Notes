@@ -179,7 +179,7 @@ extension Notification {
 /// following a simple Markdown-ish format.
 struct Note {
   
-    /// Create an empty note.
+    /// Creates an empty note.
     init() {
         self.init(contents: "", modifiedDate: Date(), uid: nil)
     }
