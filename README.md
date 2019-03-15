@@ -16,6 +16,7 @@ UI layer:
 * [`NotesListViewController`][NotesListViewController.swift]. Displays all created noted in a table view.
 * [`NoteEditorViewController`][NoteEditorViewController.swift]. View controller to show *and* edit a given note.
 * [`NoteTextStorage`][NoteTextStorage.swift]. Stores a given note text with rich formatting. This implements the core text formatting engine.
+* [`CheckmarkView`][CheckmarkView.swift]. Draws a Core Graphics based checkmark vector icon (✔) with a circular background. It also provides a simple checkmark animation.
 
 Model layer:
 
@@ -57,5 +58,7 @@ To do list:
 [Note.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L176
 
 [NotesManager.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L13
+
+[CheckmarkView.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/CheckmarkView.swift#L11 
 
 [TextKit]: https://developer.apple.com/documentation/appkit/textkit
