@@ -5,7 +5,7 @@ A simple Swift/iOS notes app with rich formatting based on TextKit APIs.
 Rich formatting summary:
 
 * Smart links for URLs and phone numbers
-* Bold and italic using `**bold**` and `*italic*`
+* Text formatting using `**bold**` and `*italic*` simple markup
 * Support for *bullet*, *dashed*, and *ordered* lists (e.g., `* `, `- `, `1. `)
 * Checkmark lists as well
 
