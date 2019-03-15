@@ -243,15 +243,21 @@ NoteTextViewDelegate, StoryboardInstantiatable {
         )
     }
     
-    private var activeField: UIView?
-    
+    private var oldContentInsets: UIEdgeInsets?
+    private var oldScrollIndicatorInsets: UIEdgeInsets?
+
     /// Need to calculate keyboard exact size due to Apple suggestions
     @objc private func keyboardWasShown(notification: NSNotification) {
-        noteTextView.isScrollEnabled = true
-        var info = notification.userInfo!
+        let info = notification.userInfo!
         let keyboardSize = (info[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
-        let contentInsets : UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize!.height, right: 0.0)
-        
+        let contentInsets : UIEdgeInsets = UIEdgeInsets(
+            top: 0.0, left: 0.0,
+            bottom: keyboardSize!.height, right: 0.0
+        )
+
+        oldContentInsets = noteTextView.contentInset
+        oldScrollIndicatorInsets = noteTextView.scrollIndicatorInsets
+
         noteTextView.contentInset = contentInsets
         noteTextView.scrollIndicatorInsets = contentInsets
         
@@ -266,6 +272,13 @@ NoteTextViewDelegate, StoryboardInstantiatable {
     
     /// Once keyboard disappears, restore original positions
     @objc func keyboardWillBeHidden(notification: NSNotification){
+        if let oldContentInsets = oldContentInsets,
+            let oldScrollIndicatorInsets = oldScrollIndicatorInsets {
+            noteTextView.contentInset = oldContentInsets
+            noteTextView.scrollIndicatorInsets = oldScrollIndicatorInsets
+        }
+
+        /*
         var info = notification.userInfo!
         let keyboardSize = (info[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
         let contentInsets : UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: -keyboardSize!.height, right: 0.0)
@@ -273,8 +286,8 @@ NoteTextViewDelegate, StoryboardInstantiatable {
         noteTextView.scrollIndicatorInsets = contentInsets
         self.view.endEditing(true)
         noteTextView.isScrollEnabled = false
+        */
     }
-
 }
 
 // MARK: -
@@ -311,8 +324,9 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
         self.pasteDelegate = self
         self.spellCheckingType = .no
         self.autocorrectionType = .no
-        self.autocapitalizationType = .none
+        self.autocapitalizationType = .sentences
         self.dataDetectorTypes = [.link, .phoneNumber]
+        self.font = noteTextStorage.bodyFont
         self.isSelectable = true
 
         resetTypingAttributes()
@@ -342,17 +356,16 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        
         let touch = touches.first!
         let swipeDistance = abs(touch.location(in: self).y - initialTouchY)
         if  swipeDistance <= 10 {
-            didTapNoteView(touch)
+            if !didTapNoteView(touch) {
+                super.touchesEnded(touches, with: event)
+            }
         }
-        print("touchesEnded.................. \(swipeDistance)")
     }
     
-    @objc private func didTapNoteView(_ touch: UITouch) {
+    @objc private func didTapNoteView(_ touch: UITouch) -> Bool {
         // Location of tap in noteView coordinates and taking the inset into account.
         var location = touch.location(in: self)
         location.x -= self.textContainerInset.left;
@@ -369,6 +382,9 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
         
         if !detectTappableText(at: charIndex, with: unitInsertionPoint) {
             startEditing(at: charIndex, with: unitInsertionPoint)
+            return true
+        } else {
+            return false
         }
     }
     
@@ -459,10 +475,14 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
             return
         }
         DispatchQueue.main.async {
-            self.selectedRange = NSRange(location: caret.range.max, length: 0)
             self.noteTextStorage.removeAttribute(.caret, range: caret.range)
-            self.resetTypingAttributes()
+            self.setCaretPosition(to: caret.range.max)
         }
+    }
+    
+    private func setCaretPosition(to caret: Int) {
+        self.selectedRange = NSRange(location: caret, length: 0)
+        self.resetTypingAttributes()
     }
 
     private var oldSelectedRange: NSRange?
@@ -492,14 +512,25 @@ final class NoteTextView: UITextView, UITextViewDelegate, UITextPasteDelegate {
     // MARK: - Checkmarks Views Overlay
     
     fileprivate func insertCheckmarkAtCaretPosition() {
-        noteTextStorage.insertCheckmark(atLine: selectedRange, withValue: false)
-        fixCaretPosition(in: selectedRange)
+        noteTextStorage.insertCheckmark(at: selectedRange.location, withValue: false)
+        moveCaretToLineEnd(at: selectedRange.location)
         layoutCheckmarkViews()
+    }
+    
+    private func moveCaretToLineEnd(at index: Int) {
+        guard index < noteTextStorage.length - 1 else {
+            fixCaretPosition(in: NSMakeRange(index, 0))
+            return
+        }
+        let lineRange = noteTextStorage.lineRange(for: index)
+        DispatchQueue.main.async {
+            self.setCaretPosition(to: lineRange.max - 1)
+        }
     }
     
     private func reuseCheckmarkView() -> CheckmarkView {
         let checkmarkView = CheckmarkView()
-        checkmarkView.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
+        checkmarkView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
         checkmarkView.addTarget(
             self, action: #selector(didTapCheckmark),
             for: .primaryActionTriggered

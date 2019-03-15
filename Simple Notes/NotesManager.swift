@@ -175,6 +175,8 @@ extension Notification {
 
 /// The note model layer object.
 /// For simplicity, this is designed as a plain value type.
+/// The actual note contents is stored in *plain text*,
+/// following a simple Markdown-ish format.
 struct Note {
   
     /// Create an empty note.

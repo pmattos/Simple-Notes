@@ -68,7 +68,7 @@ final class NoteTextStorage: NSTextStorage {
     
     // MARK: - Rich Text Formatting
     
-    private let bodyFont = UIFont.systemFont(ofSize: 18)
+    let bodyFont = UIFont.systemFont(ofSize: 18)
     
     var bodyStyle: [NSAttributedString.Key: Any] {
         let bodyParagraphStyle = NSMutableParagraphStyle()
@@ -114,6 +114,7 @@ final class NoteTextStorage: NSTextStorage {
                 return formattedText
             }
         }
+        
         return nil
     }
     
@@ -136,8 +137,8 @@ final class NoteTextStorage: NSTextStorage {
     
     // MARK: - Checkmarks Support
     
-    func insertCheckmark(atLine lineRange: NSRange, withValue value: Bool = false) {
-        listsFormatter.insertListItem(.checkmark(value), atLine: lineRange)
+    func insertCheckmark(at index: Int, withValue value: Bool = false) {
+        listsFormatter.insertListItem(.checkmark(value), at: index)
     }
     
     func setCheckmark(atLine lineRange: NSRange, to value: Bool) {
@@ -229,7 +230,7 @@ fileprivate class Formatter {
 
 extension NSAttributedString.Key {
     
-    /// Indicates the last character *before* the fixed caret location.
+    /// Indicates the last character *before* the fixed/corrected caret location.
     static let caret = NSAttributedString.Key("markdown.caret")
 }
 
@@ -464,11 +465,9 @@ enum ListItem: CaseIterable, CustomStringConvertible {
         case .bullet, .dashed, .ordered:
             break
         case .checkmark:
-            paragraphStyle.firstLineHeadIndent = 24
-            paragraphStyle.headIndent = 24
-            //paragraphStyle.minimumLineHeight = 20
-            paragraphStyle.paragraphSpacing = 8
-            //paragraphStyle.lineSpacing = 8
+            paragraphStyle.firstLineHeadIndent = 26
+            paragraphStyle.headIndent = 26
+            paragraphStyle.paragraphSpacing = 10
         }
         return paragraphStyle
     }
@@ -600,11 +599,16 @@ fileprivate final class ListsFormatter: Formatter {
         }
     }
     
-    func insertListItem(_ listItem: ListItem, atLine lineRange: NSRange) {
-        let lineStart = storage.lineRange(for: lineRange.location).location
-        //let lineStart = lineRange.location
+    func insertListItem(_ listItem: ListItem, at index: Int) {
+        let lineRange = storage.lineRange(for: index)
+        /*
+        if index != lineRange.location {
+            storage.setAttribute(.caret, value: true,
+                                 range: NSMakeRange(lineRange.location - 2, 1))
+        }
+        */
         let itemMarker = self.itemMarker(for: listItem)
-        storage.replaceCharacters(in: NSMakeRange(lineStart, 0), with: itemMarker)
+        storage.replaceCharacters(in: NSMakeRange(lineRange.location, 0), with: itemMarker)
     }
 
     @discardableResult
@@ -641,6 +645,12 @@ fileprivate final class ListsFormatter: Formatter {
                 return textFormatted
             }
         }
+        
+        // Fixes previous formatting issues, if any.
+        if listItem(at: change.range) == nil {
+            storage.setAttributes(bodyStyle, range: change.range)
+        }
+
         return nil
     }
 
@@ -703,16 +713,18 @@ fileprivate final class ListsFormatter: Formatter {
         
         // Reset the text style of the character that follows.
         let nextChar = change.lineRange.max
+        var caretOffset = 0
         if nextChar < storage.length {
-            storage.replaceCharacters(in: NSMakeRange(nextChar, 0), with: " ")
-            storage.setAttributes(bodyStyle, range: NSMakeRange(nextChar, 2))
+            storage.replaceCharacters(in: NSMakeRange(nextChar, 0), with: zeroWidthSpace)
+            storage.setAttributes(bodyStyle, range: NSMakeRange(nextChar, 1))
+            caretOffset = 1
         }
         
         storage.setAttributes(bodyStyle, range: change.lineRange)
         storage.replaceCharacters(in: change.lineRange, with: "") // Deletes line.
         
         // Fixes caret position.
-        let itemNewline = NSMakeRange(change.lineRange.location - 1, 1)
+        let itemNewline = NSMakeRange(change.lineRange.location - 1 + caretOffset, 1)
         storage.setAttribute(.caret, value: true, range: itemNewline)
         return formattedText(caretAtLine: itemNewline.location)
     }
@@ -756,8 +768,16 @@ fileprivate final class ListsFormatter: Formatter {
                 mutableLine.removeAttribute(.list, range: attrib.range)
                 mutableLine.replaceCharacters(in: attrib.range, with: listItem.markdownPrefix)
             }
+
+            trimeZeroWidthWhitespaces(from: mutableLine.mutableString)
             return mutableLine
         }
+    }
+    
+    private let zeroWidthSpaceRegex = regex(zeroWidthSpace)
+    
+    private func trimeZeroWidthWhitespaces(from str: NSMutableString) {
+        zeroWidthSpaceRegex.replaceMatches(in: str, range: str.range, withTemplate: "")
     }
 }
 
