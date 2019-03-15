@@ -13,12 +13,23 @@ Rich formatting summary:
 
 UI layer:
 
-* `NotesListViewController`. Displays all created noted in a table view.
-* `NoteEditorViewController`. View controller to show *and* edit a given note.
-* `NoteTextStorage`. Stores a given note text with rich formatting. This implements the core text formatting engine.
+* [`NotesListViewController`][NotesListViewController.swift]. Displays all created noted in a table view.
+* [`NoteEditorViewController`][NoteEditorViewController.swift]. View controller to show *and* edit a given note.
+* [`NoteTextStorage`][NoteTextStorage.swift]. Stores a given note text with rich formatting. This implements the core text formatting engine.
 
 Model layer:
 
-* `Note`. The note model layer object. For simplicity, this is designed as a plain value type. The actual note contents is stored in *plain text*, following a simple Markdown-ish format.
-* `NotesManager`. Manages a list of notes model objects. This class centralizes with all communication with Firebase.
+* [`Note`][Note.swift]. The note model layer object. For simplicity, this is designed as a plain value type. The actual note contents is stored in *plain text*, following a simple Markdown-ish format.
+* [`NotesManager`][NotesManager.swift]. Manages a list of notes model objects. This class centralizes with all communication with Firebase.
+
+
+[NotesListViewController.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesListViewController.swift
+
+[NoteEditorViewController.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NoteEditorViewController.swift
+
+[NoteTextStorage.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NoteTextStorage.swift
+
+[Note.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L174
+
+[NotesManager.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift
 
