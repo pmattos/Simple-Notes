@@ -33,3 +33,28 @@ Model layer:
 
 [NotesManager.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift
 
+## Markdown-ish Encoding ##
+
+The following richly formatted note below:
+
+![note-editor](Screenshots/note-editor.png)
+
+is encoded as the following Markdown-based plain text file (for database storage):
+
+```
+Links & Lists
+
+Some links:
+
+* www.google.com
+* www.swift.org
+* (407) 939-7000
+
+Text in **bold** too!
+
+To do list:
+
+[x] Add a nice icon (?)
+[x] Upload to Github
+[_] Notify Nikita
+```
