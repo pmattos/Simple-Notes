@@ -24,11 +24,11 @@ Model layer:
 
 ## Markdown-ish Encoding ##
 
-The following richly formatted note:
+The following richly formatted note (using [TextKit][TextKit]):
 
 <img src="Screenshots/note-editor.png" width="315">
 
-is encoded as a Markdown-based plain text *string* (for database storage):
+is then encoded as a Markdown-based, plain text *string* (for database storage):
 
 ```
 Links & Lists
@@ -57,3 +57,5 @@ To do list:
 [Note.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L176
 
 [NotesManager.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L13
+
+[TextKit]: https://developer.apple.com/documentation/appkit/textkit
