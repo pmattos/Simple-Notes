@@ -22,22 +22,11 @@ Model layer:
 * [`Note`][Note.swift]. The note model layer object. For simplicity, this is designed as a plain value type. The actual note contents is stored in *plain text*, following a simple Markdown-ish format.
 * [`NotesManager`][NotesManager.swift]. Manages a list of notes model objects. This class centralizes with all communication with Firebase.
 
-
-[NotesListViewController.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesListViewController.swift#L71
-
-[NoteEditorViewController.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NoteEditorViewController.swift
-
-[NoteTextStorage.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NoteTextStorage.swift
-
-[Note.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L174
-
-[NotesManager.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift
-
 ## Markdown-ish Encoding ##
 
 The following richly formatted note below:
 
-![note-editor](Screenshots/note-editor.png)
+![note-editor](Screenshots/note-editor.png | width=100)
 
 is encoded as the following Markdown-based plain text file (for database storage):
 
@@ -58,3 +47,13 @@ To do list:
 [x] Upload to Github
 [_] Notify Nikita
 ```
+
+[NotesListViewController.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesListViewController.swift#L71
+
+[NoteEditorViewController.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NoteEditorViewController.swift
+
+[NoteTextStorage.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NoteTextStorage.swift
+
+[Note.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift#L174
+
+[NotesManager.swift]: https://github.com/pmattos/Simple-Notes/blob/master/Simple%20Notes/NotesManager.swift
