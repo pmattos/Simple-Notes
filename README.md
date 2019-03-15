@@ -6,7 +6,7 @@ Rich formatting summary:
 
 * Smart links for URLs and phone numbers
 * Bold and italic using `**bold**` and `*italic*`
-* Support for *bullet*, *dashed*, and *ordered* lists (e.g., `* ...`, `- ...`, `1. ...`)
+* Support for *bullet*, *dashed*, and *ordered* lists (e.g., `* `, `- `, `1. `)
 * Checkmark lists as well
 
 ## Main Classes ##
