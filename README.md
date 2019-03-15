@@ -7,7 +7,7 @@ Rich formatting summary:
 * Smart links for URLs and phone numbers
 * Text formatting using `**bold**` and `*italic*` simple markup
 * Support for *bullet*, *dashed*, and *ordered* lists (e.g., `* `, `- `, `1. `)
-* Checkmark lists as well
+* Checkmark ✔ lists as well
 
 ## Main Classes ##
 
@@ -16,7 +16,7 @@ UI layer:
 * [`NotesListViewController`][NotesListViewController.swift]. Displays all created noted in a table view.
 * [`NoteEditorViewController`][NoteEditorViewController.swift]. View controller to show *and* edit a given note.
 * [`NoteTextStorage`][NoteTextStorage.swift]. Stores a given note text with rich formatting. This implements the core text formatting engine.
-* [`CheckmarkView`][CheckmarkView.swift]. Draws a Core Graphics based checkmark vector icon (✔) with a circular background. It also provides a simple checkmark animation.
+* [`CheckmarkView`][CheckmarkView.swift]. Draws a Core Graphics based checkmark vector icon with a circular background. It also provides a simple checkmark animation.
 
 Model layer:
 
