@@ -26,7 +26,7 @@ Model layer:
 
 The following richly formatted note below:
 
-![note-editor](Screenshots/note-editor.png | width=100)
+<img src="Screenshots/note-editor.png" width="320">
 
 is encoded as the following Markdown-based plain text file (for database storage):
 
