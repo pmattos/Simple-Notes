@@ -13,15 +13,15 @@ Rich formatting summary:
 
 UI layer:
 
-* [`NotesListViewController`][NotesListViewController.swift]. Displays all created noted in a table view.
+* [`NotesListViewController`][NotesListViewController.swift]. Displays all created notes in a table view.
 * [`NoteEditorViewController`][NoteEditorViewController.swift]. View controller to show *and* edit a given note.
 * [`NoteTextStorage`][NoteTextStorage.swift]. Stores a given note text with rich formatting. This implements the core text formatting engine.
-* [`CheckmarkView`][CheckmarkView.swift]. Draws a Core Graphics based checkmark vector icon with a circular background. It also provides a simple checkmark animation.
+* [`CheckmarkView`][CheckmarkView.swift]. Draws a Core Graphics based checkmark vector icon with a circular background. It also provides a simple animation for the checkmark.
 
 Model layer:
 
-* [`Note`][Note.swift]. The note model layer object. For simplicity, this is designed as a plain value type. The actual note contents is stored in *plain text*, following a simple Markdown-ish format.
-* [`NotesManager`][NotesManager.swift]. Manages a list of notes model objects. This class centralizes with all communication with Firebase.
+* [`Note`][Note.swift]. The note model layer object. For simplicity, this is designed as a plain value type. The actual note contents is stored in *plain text*, following a simple Markdown-ish format (more on that below).
+* [`NotesManager`][NotesManager.swift]. Manages a list of notes model objects. This class centralizes all communication with Firebase.
 
 ## Markdown-ish Encoding ##
 
